@@ -1,0 +1,29 @@
+{
+  "type": "module",
+  "name": "5610node",
+  "version": "1.0.0",
+  "description": "web dev homework",
+  "main": "index.js",
+  "scripts": {
+    "test": "hello",
+    "start": "node app.js"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/caiirene/my-kanbas-app.git"
+  },
+  "keywords": [
+    "node"
+  ],
+  "author": "caiirene",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/caiirene/my-kanbas-app/issues"
+  },
+  "homepage": "https://github.com/caiirene/my-kanbas-app#readme",
+  "dependencies": {
+    "cors": "^2.8.5",
+    "dotenv": "^16.3.1",
+    "express": "^4.18.2"
+  }
+}
