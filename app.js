@@ -1,27 +1,30 @@
 import "dotenv/config";
 import express from "express";
+import mongoose from "mongoose";
+import cors from "cors";
+import session from "express-session";
+
 import HelloRoutes from "./hello.js";
 import Lab5 from "./Lab55.js";
 import CourseRoutes from "./courses/routes.js";
 import ModuleRoutes from "./modules/routes.js";
 import UserRoutes from "./users/routes.js";
-import cors from "cors";
-import mongoose from "mongoose";
-import session from "express-session";
-import "dotenv/config";
-require('dotenv').config();
-const express = require('express');
-const mongoose = require('mongoose');
-const connectionString = process.env.DB_CONNECTION_STRING;
-mongoose.connect(`mongodb+srv://${process.env.DB_USERNAME}:${process.env.DB_PASSWORD}@${process.env.DB_CLUSTER_URL}?retryWrites=true&w=majority`, { useNewUrlParser: true, useUnifiedTopology: true });
 
+// Database Connection
+const dbUsername = process.env.DB_USERNAME;
+const dbPassword = process.env.DB_PASSWORD;
+const dbClusterUrl = process.env.DB_CLUSTER_URL;
+const connectionString = `mongodb+srv://${dbUsername}:${dbPassword}@${dbClusterUrl}?retryWrites=true&w=majority`;
+
+mongoose.connect(connectionString, { useNewUrlParser: true, useUnifiedTopology: true });
 
 const app = express();
 app.use(cors({
     credentials: true,
-    origin: "http://localhost:3000"|| process.env.FRONTEND_URL
+    origin: process.env.FRONTEND_URL || "http://localhost:3000"
 }));
 
+// Session Configuration
 const sessionOptions = {
     secret: "any string",
     resave: false,
@@ -38,13 +41,15 @@ app.use(session(sessionOptions));
 
 app.use(express.json());
 
-
+// Routes
 UserRoutes(app);
-ModuleRoutes(app);
-
 ModuleRoutes(app);
 CourseRoutes(app);
 Lab5(app);
 HelloRoutes(app);
 
-app.listen(process.env.PORT || 4000);
+const port = process.env.PORT || 4000;
+app.listen(port, () => {
+    console.log(`Server is running on port ${port}`);
+});
+
