@@ -16,7 +16,9 @@ const dbPassword = process.env.DB_PASSWORD;
 const dbClusterUrl = process.env.DB_CLUSTER_URL;
 const connectionString = `mongodb+srv://${dbUsername}:${dbPassword}@${dbClusterUrl}?retryWrites=true&w=majority`;
 
-mongoose.connect(connectionString, { useNewUrlParser: true, useUnifiedTopology: true });
+mongoose.connect(connectionString, { useNewUrlParser: true, useUnifiedTopology: true })
+   .catch(error => console.error("MongoDB connection error:", error));
+
 
 const app = express();
 app.use(cors({
