@@ -11,10 +11,10 @@ import ModuleRoutes from "./modules/routes.js";
 import UserRoutes from "./users/routes.js";
 import AssignmentRoutes from "./assignment/routes.js";
 
-const dbClusterUrl = process.env.DB_CLUSTER_URL || 'mongodb://127.0.0.1:27017/kanbas';
+const dbClusterUrl = 'mongodb://127.0.0.1:27017/Kanbas';
 const dbUsername = process.env.DB_USERNAME;
 const dbPassword = process.env.DB_PASSWORD;
-const connectionString = `mongodb+srv://${dbUsername}:${dbPassword}@${dbClusterUrl}?retryWrites=true&w=majority`;
+const connectionString = `mongodb+srv://${dbUsername}:${dbPassword}@${dbClusterUrl}Kanbas?retryWrites=true&w=majority`;
 
 mongoose.connect(connectionString, { useNewUrlParser: true, useUnifiedTopology: true })
    .catch(error => console.error("MongoDB connection error:", error));
@@ -31,7 +31,7 @@ const app = express();
 app.use(
   cors({
     credentials: true,
-    origin: process.env.NODE_ENV === "production" ? process.env.FRONTEND_URL : process.env.FRONTEND_URL_LOCAL,
+    origin: "*"
   })
 );
 
