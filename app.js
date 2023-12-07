@@ -11,7 +11,7 @@ import ModuleRoutes from "./modules/routes.js";
 import UserRoutes from "./users/routes.js";
 import AssignmentRoutes from "./assignment/routes.js";
 
-const dbClusterUrl = 'mongodb://127.0.0.1:27017/Kanbas';
+const dbClusterUrl = process.env.DB_CLUSTER_URL || 'mongodb://127.0.0.1:27017/kanbas';
 const dbUsername = process.env.DB_USERNAME;
 const dbPassword = process.env.DB_PASSWORD;
 const connectionString = `mongodb+srv://${dbUsername}:${dbPassword}@${dbClusterUrl}Kanbas?retryWrites=true&w=majority`;
@@ -31,7 +31,7 @@ const app = express();
 app.use(
   cors({
     credentials: true,
-    origin: "*"
+    origin: 'https://enchanting-mermaid-d9fbce.netlify.app'
   })
 );
 
