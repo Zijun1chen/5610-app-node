@@ -9,49 +9,62 @@ import Lab5 from "./Lab55.js";
 import CourseRoutes from "./courses/routes.js";
 import ModuleRoutes from "./modules/routes.js";
 import UserRoutes from "./users/routes.js";
+import AssignmentRoutes from "./assignment/routes.js";
 
-// Database Connection
+const dbClusterUrl = process.env.DB_CLUSTER_URL || 'mongodb://127.0.0.1:27017/kanbas';
 const dbUsername = process.env.DB_USERNAME;
 const dbPassword = process.env.DB_PASSWORD;
-const dbClusterUrl = process.env.DB_CLUSTER_URL;
 const connectionString = `mongodb+srv://${dbUsername}:${dbPassword}@${dbClusterUrl}?retryWrites=true&w=majority`;
 
 mongoose.connect(connectionString, { useNewUrlParser: true, useUnifiedTopology: true })
    .catch(error => console.error("MongoDB connection error:", error));
 
 
-const app = express();
-app.use(cors({
-    credentials: true,
-    origin: process.env.FRONTEND_URL || "http://localhost:3000"
-}));
+const db = mongoose.connection;
+db.on('connected', () => {
+    console.log('Connected to MongoDB');
+    console.log(`Database name: ${db.name}`);
+});
 
-// Session Configuration
+
+const app = express();
+app.use(
+  cors({
+    credentials: true,
+    origin: process.env.NODE_ENV === "production" ? process.env.FRONTEND_URL : process.env.FRONTEND_URL_LOCAL,
+  })
+);
+
+
 const sessionOptions = {
     secret: "any string",
     resave: false,
     saveUninitialized: false,
-};
-if (process.env.NODE_ENV !== "development") {
+  };
+  if (process.env.NODE_ENV !== "development") {
     sessionOptions.proxy = true;
     sessionOptions.cookie = {
-        sameSite: "none",
-        secure: true,
+      sameSite: "none",
+      secure: true,
     };
-}
-app.use(session(sessionOptions));
+  }
+  app.use(
+    session(sessionOptions)
+  );
 
-app.use(express.json());
-
-// Routes
-UserRoutes(app);
-ModuleRoutes(app);
-CourseRoutes(app);
-Lab5(app);
-HelloRoutes(app);
+  app.use(express.json());
+  UserRoutes(app);
+  AssignmentRoutes(app);
+  ModuleRoutes(app);
+  CourseRoutes(app);
+  Lab5(app);
+  HelloRoutes(app);
 
 const port = process.env.PORT || 4000;
 app.listen(port, () => {
     console.log(`Server is running on port ${port}`);
 });
+
+
+
 
