@@ -11,13 +11,8 @@ import ModuleRoutes from "./modules/routes.js";
 import UserRoutes from "./users/routes.js";
 import AssignmentRoutes from "./assignment/routes.js";
 
-const dbClusterUrl = process.env.DB_CLUSTER_URL || 'mongodb://127.0.0.1:27017/kanbas';
-const dbUsername = process.env.DB_USERNAME;
-const dbPassword = process.env.DB_PASSWORD;
-const connectionString = `mongodb+srv://${dbUsername}:${dbPassword}@${dbClusterUrl}Kanbas?retryWrites=true&w=majority`;
-
-mongoose.connect(connectionString, { useNewUrlParser: true, useUnifiedTopology: true })
-   .catch(error => console.error("MongoDB connection error:", error));
+const CONNECTION_STRING = process.env.MONGODB_URI || 'mongodb://127.0.0.1:27017/Kanbas';
+mongoose.connect(CONNECTION_STRING);
 
 
 const db = mongoose.connection;
@@ -64,7 +59,3 @@ const port = process.env.PORT || 4000;
 app.listen(port, () => {
     console.log(`Server is running on port ${port}`);
 });
-
-
-
-
